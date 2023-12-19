@@ -1,30 +1,47 @@
-def exit():
-    pass
+import subprocess
+def install_modsecurity_nginx():
+    try:
+        # Update the package list
+        subprocess.run(['sudo', 'apt', 'update'])
+        #install git
+        subprocess.run(['sudo','apt','install','git'])
+    
 
 
-def main_menu():
+        # Install required packages for Nginx
+        subprocess.run(['sudo', 'apt', 'install', 'nginx'])
+
+        
+        # Include ModSecurity configuration in Nginx
+        with open('/etc/nginx/nginx.conf', 'a') as conf_file:
+            conf_file.write('\n')
+            conf_file.write('include /etc/nginx/modsec/modsecurity.conf;')
+
+        # Restart Nginx to apply changes
+        subprocess.run(['sudo', 'systemctl', 'restart', 'nginx'])
+
+        print("Nginx with ModSecurity installed successfully.")
+    except Exception as e:
+        print(f"Error during ModSecurity installation: {e}")
+def main():
     while True:
-        print("\nSimple OS Menu:")
-        print("1.Install modsecurity")
-        print("2. configure mod sec")
-        print("3. Add rule sets")
-        print("4. Exit")
+        print("\nModSecurity Installation Menu:")
+        print("1. Install ModSec WAF")
+        print("2. Secure the web application")
+        print("3. Exit")
 
-        choice = input("Enter your choice (1-4): ")
+        choice = input("Enter your choice (1/2/3): ")
 
-        if choice == "1":
-            print('choice 1')
-        elif choice == "2":
-            print('choice 2')
+        if choice == '1':
+            install_modsecurity_nginx()
+        elif choice == '2':
+            print('hi')
 
-        elif choice == "3":
-            print('choice 3')
-
-        elif choice == "4":
-            exit()
+        elif choice == '3':
+            print("Exiting the program.")
+            break
         else:
-            print("Invalid choice. Please enter a number between 1 and 4.")
-
+            print("Invalid choice. Please enter a valid option.")
 
 if __name__ == "__main__":
-    main_menu()
+    main()
