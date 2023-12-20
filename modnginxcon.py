@@ -4,7 +4,7 @@ import shutil
 import urllib.request
 import tarfile
 
-def download_compile_nginx_modsecurity_connector(version="v0.1.0"):
+def download_compile_nginx_modsecurity_connector(version="v1.18.0"):
     download_url = f"https://github.com/SpiderLabs/ModSecurity-nginx/archive/{version}.tar.gz"
     download_dir = f"nginx_modsecurity_connector_{version}"
 
