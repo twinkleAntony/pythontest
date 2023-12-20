@@ -1,4 +1,6 @@
+
 import subprocess
+
 def install_packages(package_list):
     """
     Install a list of packages using apt-get.
@@ -21,12 +23,9 @@ def install_packages(package_list):
 
 # List of packages to install
 packages_to_install = [
-     'git' 'apt-utils', 'autoconf', 'automake', 'build-essential', 'git',
+    'apt-utils', 'autoconf', 'automake', 'build-essential', 'git',
     'libcurl4-openssl-dev', 'libgeoip-dev', 'liblmdb-dev', 'libpcre++-dev',
     'libtool', 'libxml2-dev', 'libyajl-dev', 'pkgconf', 'wget', 'zlib1g-dev'
-    'build-essential', 'libtool', 'autoconf', 'automake', 'pkg-config',
-    'libcurl4-openssl-dev', 'libxml2', 'libpcre++-dev'
 ]
 
-# Call the function to install the packages
-install_packages(packages_to_install)
+
