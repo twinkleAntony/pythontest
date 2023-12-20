@@ -5,10 +5,8 @@ import urllib.request
 import tarfile
 
 def download_compile_nginx_modsecurity_connector():
-    download_url = f"https://github.com/SpiderLabs/ModSecurity-nginx/archive/{version}.tar.gz"
+    download_url =  subprocess.run(['sudo', 'git', 'clone', '--depth', '1', 'https://github.com/SpiderLabs/ModSecurity-nginx.git'])
     download_dir = subprocess.run(['nginx', '-v'])
-    
-
     try:
         # Download and extract
         os.makedirs(download_dir, exist_ok=True)
