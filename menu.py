@@ -13,22 +13,22 @@ def install_modsecurity_nginx():
     
 
     # Clone the libmodsecurity repository
-    subprocess.run(['git', 'clone', 'https://github.com/SpiderLabs/ModSecurity.git'])
+       subprocess.run(['git', 'clone', 'https://github.com/SpiderLabs/ModSecurity.git'])
 
     # Navigate into the ModSecurity directory
-    subprocess.run(['cd', 'ModSecurity'])
-    subprocess.run( ['git' 'submodule' 'init'])
-    subprocess.run(['git' 'submodule' 'update'])
+      subprocess.run(['cd', 'ModSecurity'])
+      subprocess.run( ['git' 'submodule' 'init'])
+      subprocess.run(['git' 'submodule' 'update'])
 
     # Run autoreconf to generate configure script
-    subprocess.run(['sudo', 'autoreconf', '--force', '--install'])
+      subprocess.run(['sudo', 'autoreconf', '--force', '--install'])
 
     # Configure and make
-    subprocess.run(['sudo', './configure'])
-    subprocess.run(['sudo', 'make'])
+      subprocess.run(['sudo', './configure'])
+      subprocess.run(['sudo', 'make'])
 
     # Install libmodsecurity
-    subprocess.run(['sudo', 'make', 'install'])
+     subprocess.run(['sudo', 'make', 'install'])
 
     print("libmodsecurity installed successfully.")
 
