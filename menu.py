@@ -13,7 +13,7 @@ def install_modsecurity_nginx():
     
 
     # Clone the libmodsecurity repository
-       subprocess.run(['git', 'clone', 'https://github.com/SpiderLabs/ModSecurity.git'])
+      subprocess.run(['git', 'clone', 'https://github.com/SpiderLabs/ModSecurity.git'])
 
     # Navigate into the ModSecurity directory
       subprocess.run(['cd', 'ModSecurity'])
