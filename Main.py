@@ -12,19 +12,10 @@ def install_modsecurity_nginx():
         subprocess.run(['git', 'clone', 'https://github.com/SpiderLabs/ModSecurity.git'])
 
         # Navigate into the ModSecurity directory
-        subprocess.run(['cd', 'ModSecurity'])
-        subprocess.run(['git' 'submodule' 'init'])
-        subprocess.run(['git' 'submodule' 'update'])
 
-        # Run autoreconf to generate configure script
-        subprocess.run(['sudo', 'autoreconf', '--force', '--install'])
-
-        # Configure and make
-        subprocess.run(['sudo', './configure'])
-        subprocess.run(['sudo', 'make'])
 
         # Install molecularity
-        subprocess.run(['sudo', 'make', 'install'])
+        subprocess.run(['sudo', 'apt-get', 'install','Libmodsecurity3'])
 
         print("libmodsecurity installed successfully.")
 
