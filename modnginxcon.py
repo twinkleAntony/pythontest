@@ -5,7 +5,7 @@ import urllib.request
 import tarfile
 
 # NGINX version
-nginx_version = "1.13.1"
+nginx_version = "1.18.1"
 
 # Clone ModSecurity module
 subprocess.run(["git", "clone", "--depth", "1", "https://github.com/SpiderLabs/ModSecurity-nginx.git"])
