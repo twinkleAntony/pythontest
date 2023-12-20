@@ -3,29 +3,21 @@ import package
 
 def install_modsecurity_nginx():
     try:
-
+        subprocess.run(['sudo', 'apt', 'update'])
         # Install required packages for Nginx1
         subprocess.run(['sudo', 'apt', 'install', 'nginx'])
-        subprocess.run(['sudo', 'apt', 'get', 'install', "lib"])
-        subprocess.run(['sudo', 'apt', 'update'])
-        # Clone the molecularity repository#
-
-
-        # Navigate into the ModSecurity directory
-
-
         # Install molecularity
         subprocess.run(['sudo', 'apt-get', 'install','Libmodsecurity3'])
 
         print("libmodsecurity installed successfully.")
 
         # Include ModSecurity configuration in Nginx
-        with open('/etc/nginx/nginx.conf', 'a') as conf_file:
-            conf_file.write('\n')
-            conf_file.write('include /etc/nginx/modsec/modsecurity.conf;')
+       # with open('/etc/nginx/nginx.conf', 'a') as conf_file:
+        #    conf_file.write('\n')
+         #   conf_file.write('include /etc/nginx/modsec/modsecurity.conf;')
 
         # Restart Nginx to apply changes
-        subprocess.run(['sudo', 'systemctl', 'restart', 'nginx'])
+        #subprocess.run(['sudo', 'systemctl', 'restart', 'nginx'])
 
         print("Nginx with ModSecurity installed successfully.")
     except Exception as e:
