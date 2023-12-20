@@ -32,7 +32,7 @@ def compile_modsecurity_nginx_connector():
         subprocess.run(['sudo', 'git', 'clone', '--depth', '1', 'https://github.com/SpiderLabs/ModSecurity-nginx.git'])
 
         # Determine NGINX version
-        nginx_version_process = subprocess.run(['nginx', '-v'], capture_output=True, text=True)
+        nginx_version_process = subprocess.run(['nginx', '-v'])
         nginx_version = nginx_version_process.stdout.split('/')[1].strip()
 
         # Download NGINX source code
