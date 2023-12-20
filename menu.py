@@ -1,5 +1,5 @@
+import packages;
 import  subprocess
-import package
 def install_modsecurity_nginx():
     try:
 
@@ -10,7 +10,7 @@ def install_modsecurity_nginx():
         subprocess.run(['sudo', 'apt', 'update'])
 
     # Install required build dependencies
-    subprocess.run(['sudo', 'apt', 'install', 'git', 'build-essential','libtool', 'automake', 'pkg-config','libcurl4-openssl-dev','libxml2','libpcre++-dev'])
+    
 
     # Clone the libmodsecurity repository
     subprocess.run(['git', 'clone', 'https://github.com/SpiderLabs/ModSecurity.git'])
