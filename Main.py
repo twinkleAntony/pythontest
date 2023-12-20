@@ -29,7 +29,7 @@ import subprocess
 def compile_modsecurity_nginx_connector():
     try:
         # Clone the ModSecurity-nginx repository
-        subprocess.run(['git', 'clone', '--depth', '1', 'https://github.com/SpiderLabs/ModSecurity-nginx.git'])
+        subprocess.run(['sudo','git', 'clone', '--depth', '1', 'https://github.com/SpiderLabs/ModSecurity-nginx.git'])
 
         # Determine NGINX version
         nginx_version_process = subprocess.run(['nginx', '-v'])
