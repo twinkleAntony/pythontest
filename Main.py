@@ -1,8 +1,4 @@
-import os
-import shutil
 import subprocess
-import tarfile
-import urllib.request
 
 
 def install_modsecurity_nginx():
@@ -29,39 +25,34 @@ def install_modsecurity_nginx():
         print(f"Error during ModSecurity installation: {e}")
 
 
-def compile_modsecurity_nginx_connector(version="v0.1.0"):
-    download_url = f"https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/{version}/modsecurity-nginx-{version}.tar.gz"
-    download_dir = f"nginx_modsecurity_connector_{version}"
+def compile_modsecurity_nginx_connector():
 
     try:
-        # Download and extract
-        os.makedirs(download_dir, exist_ok=True)
-        tar_filename = f"modsecurity-nginx-{version}.tar.gz"
-        tar_filepath = os.path.join(download_dir, tar_filename)
-        urllib.request.urlretrieve(download_url, tar_filepath)
+        # Clone the ModSecurity-nginx repository
+        subprocess.run(['sudo', 'git', 'clone', '--depth', '1', 'https://github.com/SpiderLabs/ModSecurity-nginx.git'])
 
-        with tarfile.open(tar_filepath, "r:gz") as tar:
-            tar.extractall(download_dir)
+        # Determine NGINX version
+        nginx_version_process = subprocess.run(['nginx', '-v'], capture_output=True, text=True)
+        nginx_version = nginx_version_process.stdout.split('/')[1].strip()
 
-        os.remove(tar_filepath)
+        # Download NGINX source code
+        nginx_source_url = f'http://nginx.org/download/nginx-{nginx_version}.tar.gz'
+        subprocess.run(['wget', nginx_source_url])
+        subprocess.run(['tar', 'zxvf', f'nginx-{nginx_version}.tar.gz'])
 
-        # Compile the module
-        module_dir = os.path.join(download_dir, f"modsecurity-nginx-{version}")
-        os.chdir(module_dir)
+        # Compile the dynamic module
+        subprocess.run(['cd', f'nginx-{nginx_version}'])
+        subprocess.run(['./configure', '--with-compat', f'--add-dynamic-module=../ModSecurity-nginx'])
+        subprocess.run(['make', 'modules'])
+        subprocess.run(['cp', 'objs/ngx_http_modsecurity_module.so', '/etc/nginx/modules'])
 
-        subprocess.run(["./configure"])
-        subprocess.run(["make"])
-
-        # Copy the compiled module
-        nginx_modules_dir = "/etc/nginx/modules"
-        shutil.copy("objs/ngx_http_modsecurity_module.so", nginx_modules_dir)
-
-        print(f"NGINX ModSecurity Connector {version} has been downloaded and compiled successfully.")
+        print("ModSecurity connector for NGINX compiled and installed successfully.")
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f"Error during compilation: {e}")
     finally:
-        # Clean up: Remove the downloaded directory
-        shutil.rmtree(download_dir, ignore_errors=True)
+        # Clean up: Remove the cloned repositories and downloaded files
+        subprocess.run(['rm', '-rf', 'ModSecurity-nginx', f'nginx-{nginx_version}', f'nginx-{nginx_version}.tar.gz'])
+
 
 
 
