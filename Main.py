@@ -9,7 +9,7 @@ def install_modsecurity_nginx():
         subprocess.run(['sudo', 'apt', 'get', 'install', "lib"])
         subprocess.run(['sudo', 'apt', 'update'])
         # Clone the molecularity repository#
-        subprocess.run(['git', 'clone', 'https://github.com/SpiderLabs/ModSecurity.git'])
+
 
         # Navigate into the ModSecurity directory
 
