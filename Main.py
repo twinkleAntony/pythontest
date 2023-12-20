@@ -33,15 +33,15 @@ def compile_modsecurity_nginx_connector():
 
         # Determine NGINX version
         nginx_version_process = subprocess.run(['nginx', '-v'])
-        nginx_version = nginx_version_process.stdout.split('/')[1].strip()
+
 
         # Download NGINX source code
-        nginx_source_url = f'http://nginx.org/download/nginx-{nginx_version}.tar.gz'
+        nginx_source_url = f'http://nginx.org/download/nginx-{nginx_version_process}.tar.gz'
         subprocess.run(['wget', nginx_source_url])
-        subprocess.run(['tar', 'zxvf', f'nginx-{nginx_version}.tar.gz'])
+        subprocess.run(['tar', 'zxvf', f'nginx-{nginx_version_process}.tar.gz'])
 
         # Compile the dynamic module
-        subprocess.run(['cd', f'nginx-{nginx_version}'])
+        subprocess.run(['cd', f'nginx-{nginx_version_process}'])
         subprocess.run(['./configure', '--with-compat', f'--add-dynamic-module=../ModSecurity-nginx'])
         subprocess.run(['make', 'modules'])
         subprocess.run(['cp', 'objs/ngx_http_modsecurity_module.so', '/etc/nginx/modules'])
