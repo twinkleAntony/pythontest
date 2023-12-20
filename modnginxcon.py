@@ -4,9 +4,10 @@ import shutil
 import urllib.request
 import tarfile
 
-def download_compile_nginx_modsecurity_connector(version="v0.1.0"):
+def download_compile_nginx_modsecurity_connector():
     download_url = f"https://github.com/SpiderLabs/ModSecurity-nginx/archive/{version}.tar.gz"
-    download_dir = f"nginx_modsecurity_connector_{version}"
+    download_dir = subprocess.run(['nginx', '-v'])
+    
 
     try:
         # Download and extract
@@ -34,9 +35,8 @@ def download_compile_nginx_modsecurity_connector(version="v0.1.0"):
         print(f"NGINX ModSecurity Connector {version} has been downloaded and compiled successfully.")
     except Exception as e:
         print(f"An error occurred: {e}")
-    finally:
-        # Clean up: Remove the downloaded directory
-        shutil.rmtree(download_dir, ignore_errors=True)
+    
+      
 
 if __name__ == "__main__":
     download_compile_nginx_modsecurity_connector()
