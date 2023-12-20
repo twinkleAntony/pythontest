@@ -1,20 +1,23 @@
-import subprocess
-import package;
+import  subprocess
 def install_modsecurity_nginx():
     try:
-        # Update the package list
-        subprocess.run(['sudo', 'apt', 'update'])
-        #install git
-        subprocess.run(['sudo','apt','install','git'])
+
+
+
     
 
 
         # Install required packages for Nginx
-        subprocess.run(['sudo', 'apt', 'install', 'nginx','libnginx-mod-http-modsecurity'])
-        
-        subprocess.run(['sudo', 'ln', '-s', '/usr/share/modsecurity-crs/', '/etc/nginx/modsec'])
+        subprocess.run(['sudo', 'apt', 'install', 'nginx'])
+        subprocess.run(['sudo', 'apt', 'install', 'libnginx-mod-http-modsecurity'])
 
-        
+        subprocess.run(['sudo', 'ln', '-s', '/usr/share/modsecurity-crs/', '/etc/nginx/modsec'])
+        #install  mod security
+        subprocess.run('sudo','apt', 'get','install','lib')
+
+
+
+
         # Include ModSecurity configuration in Nginx
         with open('/etc/nginx/nginx.conf', 'a') as conf_file:
             conf_file.write('\n')

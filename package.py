@@ -11,6 +11,8 @@ def install_packages(package_list):
     - None
     """
     try:
+        subprocess.run(['sudo', 'apt', 'update'])
+        subprocess.run(['sudo', 'apt', 'upgrade'])
         # Construct the apt-get install command with the package names
         install_command = ['sudo', 'apt-get', 'install', '-y'] + package_list
         subprocess.check_call(install_command)
@@ -20,7 +22,7 @@ def install_packages(package_list):
 
 # List of packages to install
 packages_to_install = [
-    'apt-utils', 'autoconf', 'automake', 'build-essential', 'git',
+     'git' 'apt-utils', 'autoconf', 'automake', 'build-essential', 'git',
     'libcurl4-openssl-dev', 'libgeoip-dev', 'liblmdb-dev', 'libpcre++-dev',
     'libtool', 'libxml2-dev', 'libyajl-dev', 'pkgconf', 'wget', 'zlib1g-dev'
 ]
