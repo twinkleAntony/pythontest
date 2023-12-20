@@ -1,4 +1,3 @@
-import subprocess
 import os
 import subprocess
 import shutil
@@ -41,6 +40,3 @@ def download_compile_nginx_modsecurity_connector(version="v0.1.0"):
 
 if __name__ == "__main__":
     download_compile_nginx_modsecurity_connector()
-
-
-   
