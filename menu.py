@@ -1,19 +1,38 @@
 import  subprocess
+import package
 def install_modsecurity_nginx():
     try:
 
-
-
-    
-
-
-        # Install required packages for Nginx
+     # Install required packages for Nginx
         subprocess.run(['sudo', 'apt', 'install', 'nginx'])
-        subprocess.run(['sudo', 'apt', 'install', 'libnginx-mod-http-modsecurity'])
 
-        subprocess.run(['sudo', 'ln', '-s', '/usr/share/modsecurity-crs/', '/etc/nginx/modsec'])
-        #install  mod security
         subprocess.run('sudo','apt', 'get','install','lib')
+    subprocess.run(['sudo', 'apt', 'update'])
+
+    # Install required build dependencies
+    subprocess.run(['sudo', 'apt', 'install', 'git', 'build-essential', 'libtool', 'autoconf', 'automake', 'pkg-config',
+                    'libcurl4-openssl-dev', 'libxml2', 'libpcre++-dev'])
+
+    # Clone the libmodsecurity repository
+    subprocess.run(['git', 'clone', 'https://github.com/SpiderLabs/ModSecurity.git'])
+
+    # Navigate into the ModSecurity directory
+    subprocess.run(['cd', 'ModSecurity'])
+    subprocess.run( ['git' 'submodule' 'init'])
+    subprocess.run(['git' 'submodule' 'update'])
+
+    # Run autoreconf to generate configure script
+    subprocess.run(['sudo', 'autoreconf', '--force', '--install'])
+
+    # Configure and make
+    subprocess.run(['sudo', './configure'])
+    subprocess.run(['sudo', 'make'])
+
+    # Install libmodsecurity
+    subprocess.run(['sudo', 'make', 'install'])
+
+    print("libmodsecurity installed successfully.")
+
 
 
 
