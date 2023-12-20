@@ -12,9 +12,9 @@ def install_modsecurity_nginx():
         print("libmodsecurity installed successfully.")
 
         # Include ModSecurity configuration in Nginx
-        with open('/etc/nginx/nginx.conf', 'a') as conf_file:
-            conf_file.write('\n')
-        conf_file.write('include /etc/nginx/modsec/modsecurity.conf;')
+        # with open('/etc/nginx/nginx.conf', 'a') as conf_file:
+        #   conf_file.write('\n')
+        # conf_file.write('include /etc/nginx/modsec/modsecurity.conf;')
 
         # Restart Nginx to apply changes
         #subprocess.run(['sudo', 'systemctl', 'restart', 'nginx'])
@@ -49,13 +49,6 @@ def compile_modsecurity_nginx_connector():
         print("ModSecurity connector for NGINX compiled and installed successfully.")
     except Exception as e:
         print(f"Error during compilation: {e}")
-    finally:
-        # Clean up: Remove the cloned repositories and downloaded files
-        subprocess.run(['rm', '-rf', 'ModSecurity-nginx', f'nginx-{nginx_version}', f'nginx-{nginx_version}.tar.gz'])
-
-
-
-
 
 
 def main():
@@ -70,11 +63,6 @@ def main():
         if choice == '1':
             install_modsecurity_nginx()
             compile_modsecurity_nginx_connector()
-
-
-
-
-
         elif choice == '2':
             print('hi')
 
