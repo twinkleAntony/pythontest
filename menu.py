@@ -7,7 +7,7 @@ def install_modsecurity_nginx():
         subprocess.run(['sudo', 'apt', 'install', 'nginx'])
 
         subprocess.run('sudo','apt', 'get','install','lib')
-    subprocess.run(['sudo', 'apt', 'update'])
+        subprocess.run(['sudo', 'apt', 'update'])
 
     # Install required build dependencies
     subprocess.run(['sudo', 'apt', 'install', 'git', 'build-essential', 'libtool', 'autoconf', 'automake', 'pkg-config',
