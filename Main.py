@@ -42,7 +42,7 @@ def compile_modsecurity_nginx_connector():
     try:
 
         # Change the current working directory
-        os.chdir('/usr/local/src/')
+        os.chdir('sudo /usr/local/src/')
         # Clone ModSecurity module
         subprocess.run(["git", "clone", "--depth", "1", "https://github.com/SpiderLabs/ModSecurity-nginx.git"])
         # Determine NGINX version
