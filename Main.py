@@ -29,7 +29,7 @@ def install_modsecurity_nginx():
         subprocess.run(['sudo', 'apt', 'install', 'nginx'])
         print("Nginx with ModSecurity installed successfully.")
         # Install molecularity
-        subprocess.run(['sudo', 'apt' ,'install ' ,'libmodsecurity3'])
+        subprocess.run(['sudo', 'apt', 'install', 'libmodsecurity3'])
 
         print("libmodsecurity installed successfully.")
 
