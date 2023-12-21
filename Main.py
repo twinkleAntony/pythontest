@@ -50,7 +50,9 @@ def compile_modsecurity_nginx_connector():
         NGINX_VERSION =subprocess.check_output([ '`nginx -v 2>&1', '|',' awk {print $3}', '|', 'cut -d"/"', '-f', '2'])
         print("NGINX Version:", NGINX_VERSION)
         # Download NGINX source code
-        nginx_url = "http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz"
+
+        nginx_url = f"http://nginx.org/download/nginx-{NGINX_VERSION}.tar.gz"
+
         subprocess.run(['wget', nginx_url])
 
         subprocess.run(['tar', 'zxvf', 'nginx-$NGINX_VERSION.tar.gz'])
