@@ -1,7 +1,7 @@
 import os
 import subprocess
 import tarfile
-import urllib.request
+import urllib
 
 
 def compile_modsecurity_nginx_connector():
@@ -31,23 +31,9 @@ def compile_modsecurity_nginx_connector():
         print("NGINX Version:", NGINX_VERSION)
 
         # Download NGINX source code
-        nginx_url = "http://nginx.org/download/nginx-{NGINX_VERSION}.tar.gz"
+        nginx_url = f"http://nginx.org/download/nginx-{NGINX_VERSION}.tar.gz"
         subprocess.run(['wget', nginx_url])
 
-        # Download the file using urllib.request
-        try:
-            with urllib.request.urlopen(nginx_url) as response, open(f"nginx-{NGINX_VERSION}.tar.gz", "wb") as outfile:
-                outfile.write(response.read())
-            print(f"Downloaded: nginx-{NGINX_VERSION}.tar.gz")
-        except urllib.error.HTTPError as e:
-            if e.code == 404:
-                print(f"Error: NGINX version {NGINX_VERSION} not found on the server.")
-            else:
-                print(f"HTTP Error {e.code}: {e.reason}")
-        except urllib.error.URLError as e:
-            print(f"URL Error: {e.reason}")
-        except Exception as e:
-            print(f"Error: {e}")
         subprocess.run(['tar', 'zxvf', 'nginx-$NGINX_VERSION.tar.gz'])
         os.chdir('nginx-$NGINX_VERSION;')
 
