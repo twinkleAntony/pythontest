@@ -23,14 +23,8 @@ def compile_modsecurity_nginx_connector():
                 ["sudo", "git", "clone", "--depth", "1", "https://github.com/SpiderLabs/ModSecurity-nginx.git",
                  clone_directory])
             print("ModSecurity-nginx repository cloned successfully.")
-    except Exception as e:
-     print("Error during compilation: {e}")
-
-    try:
-        # Determine NGINX version
         NGINX_VERSION = subprocess.check_output(['`nginx -v 2>&1', '|', ' awk {print $3}', '|', 'cut -d"/"', '-f', '2'])
         print("NGINX Version:", NGINX_VERSION)
-
 
         # Download NGINX source code
         nginx_url = "http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz"
@@ -39,7 +33,7 @@ def compile_modsecurity_nginx_connector():
         subprocess.run(['tar', 'zxvf', 'nginx-$NGINX_VERSION.tar.gz'])
         os.chdir('nginx-$NGINX_VERSION;')
 
-        #Compile the dynamic module
+        # Compile the dynamic module
 
         subprocess.run(['./configure', '--with-compat', '--add-dynamic-module=../ModSecurity-nginx'])
         subprocess.run(['make', 'modules'])
@@ -48,6 +42,8 @@ def compile_modsecurity_nginx_connector():
         subprocess.run(['cp', 'objs/ngx_http_modsecurity_module.so', '/etc/nginx/modules'])
 
         print("ModSecurity connector for NGINX compiled and installed successfully.")
+
+
     except Exception as e:
      print("Error during compilation: {e}")
 
