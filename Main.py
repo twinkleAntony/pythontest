@@ -1,27 +1,37 @@
+import os
 import subprocess
+def install_required_packages():
+    """
+     # Install Prerequisite Packages
+    - None
+    """
+    try:
+        subprocess.run(['sudo', 'apt', 'update'])
+        subprocess.run(['sudo', 'apt', 'upgrade'])
 
+        subprocess.check_call([
+            'apt-get', 'install', '-y', 'apt-utils', 'autoconf', 'automake',
+            'build-essential', 'git', 'libcurl4-openssl-dev', 'libgeoip-dev',
+            'liblmdb-dev', 'libpcre++-dev', 'libtool', 'libxml2-dev', 'libyajl-dev',
+            'pkgconf', 'wget', 'zlib1g-dev'
+        ])
+        print("Successfully installed required packages.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error installing required packages: {e}")
+
+# Call the function to install the packages
 
 def install_modsecurity_nginx():
     try:
         subprocess.run(['sudo', 'apt', 'update'])
         # Install required packages for Nginx1
-        shell_command = "DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils autoconf automake build-essential git libcurl4-openssl-dev libgeoip-dev liblmdb-dev libpcre++-dev libtool libxml2-dev libyajl-dev pkgconf wget zlib1g-dev"
-        subprocess.run(shell_command)
+
         subprocess.run(['sudo', 'apt', 'install', 'nginx'])
+        print("Nginx with ModSecurity installed successfully.")
         # Install molecularity
-        subprocess.run(['sudo', 'apt-get', 'install', 'libmodsecurity3'])
+        subprocess.run(['sudo', 'apt-get install -y', 'libmodsecurity3', 'libmodsecurity-dev'])
 
         print("libmodsecurity installed successfully.")
-
-        # Include ModSecurity configuration in Nginx
-        # with open('/etc/nginx/nginx.conf', 'a') as conf_file:
-        #   conf_file.write('\n')
-        # conf_file.write('include /etc/nginx/modsec/modsecurity.conf;')
-
-        # Restart Nginx to apply changes
-        #subprocess.run(['sudo', 'systemctl', 'restart', 'nginx'])
-
-        print("Nginx with ModSecurity installed successfully.")
 
     except Exception as e:
         print(f"Error during ModSecurity installation: {e}")
@@ -30,21 +40,28 @@ def install_modsecurity_nginx():
 def compile_modsecurity_nginx_connector():
 
     try:
-        # Clone the ModSecurity-nginx repository
-       
+
+        # Change the current working directory
+        os.chdir('/usr/local/src/')
+        # Clone ModSecurity module
+        subprocess.run(["git", "clone", "--depth", "1", "https://github.com/SpiderLabs/ModSecurity-nginx.git"])
         # Determine NGINX version
-        nginx_version_process = subprocess.run(['nginx', '-v'])
 
-
+        NGINX_VERSION =subprocess.check_output([ '`nginx -v 2>&1', '|',' awk {print $3}', '|', 'cut -d"/"', '-f', '2'])
+        print("NGINX Version:", NGINX_VERSION)
         # Download NGINX source code
-        nginx_source_url = 'http://nginx.org/download/nginx-{nginx_version_process}.tar.gz'
-        subprocess.run(['wget', nginx_source_url])
-        subprocess.run(['tar', 'zxvf', 'nginx-{nginx_version_process}.tar.gz'])
+        nginx_url = "http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz"
+        subprocess.run(['wget', nginx_url])
+
+        subprocess.run(['tar', 'zxvf', 'nginx-$NGINX_VERSION.tar.gz'])
+        os.chdir('nginx-$NGINX_VERSION;')
 
         # Compile the dynamic module
-        subprocess.run(['cd', 'nginx-{nginx_version_process}'])
-        subprocess.run(['./configure', '--with-compat', f'--add-dynamic-module=../ModSecurity-nginx'])
+
+        subprocess.run(['./configure', '--with-compat', '--add-dynamic-module=../ModSecurity-nginx'])
         subprocess.run(['make', 'modules'])
+        subprocess.run(["mkdir", "-p", "/etc/nginx/modules/"])
+        print("Directory '/etc/nginx/modules/' created successfully.")
         subprocess.run(['cp', 'objs/ngx_http_modsecurity_module.so', '/etc/nginx/modules'])
 
         print("ModSecurity connector for NGINX compiled and installed successfully.")
@@ -62,6 +79,7 @@ def main():
         choice = input("Enter your choice (1/2/3): ")
 
         if choice == '1':
+            install_required_packages()
             install_modsecurity_nginx()
             compile_modsecurity_nginx_connector()
         elif choice == '2':
