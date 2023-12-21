@@ -14,7 +14,7 @@ def compile_modsecurity_nginx_connector():
         # Verify that the program's working directory indeed changed
         print(f"The working directory is now '{os.getcwd()}'.")
         # Clone ModSecurity module
-        subprocess.run(["git", "clone", "--depth", "1", "https://github.com/SpiderLabs/ModSecurity-nginx.git"])
+        subprocess.run([ "sudo","git", "clone", "--depth", "1", "https://github.com/SpiderLabs/ModSecurity-nginx.git"])
         # Determine NGINX version
 
         NGINX_VERSION =subprocess.check_output([ '`nginx -v 2>&1', '|',' awk {print $3}', '|', 'cut -d"/"', '-f', '2'])
