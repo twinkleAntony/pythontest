@@ -29,7 +29,7 @@ def install_modsecurity_nginx():
         subprocess.run(['sudo', 'apt', 'install', 'nginx'])
         print("Nginx with ModSecurity installed successfully.")
         # Install molecularity
-        subprocess.run(['sudo', 'apt-get install -y', 'libmodsecurity3', 'libmodsecurity-dev'])
+        subprocess.run(['sudo', 'apt-get' ,'install -y', 'libmodsecurity3', 'libmodsecurity-dev'])
 
         print("libmodsecurity installed successfully.")
 
@@ -66,7 +66,7 @@ def compile_modsecurity_nginx_connector():
 
         print("ModSecurity connector for NGINX compiled and installed successfully.")
     except Exception as e:
-        print(f"Error during compilation: {e}")
+        print("Error during compilation: {e}")
 
 
 def main():
