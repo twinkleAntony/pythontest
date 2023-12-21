@@ -1,5 +1,6 @@
 import os
 import subprocess
+import tarfile
 
 
 def compile_modsecurity_nginx_connector():
@@ -29,7 +30,7 @@ def compile_modsecurity_nginx_connector():
         print("NGINX Version:", NGINX_VERSION)
 
         # Download NGINX source code
-        nginx_url = "http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz"
+        nginx_url = "http://nginx.org/download/nginx-{NGINX_VERSION}.tar.gz"
         subprocess.run(['wget', nginx_url])
 
         subprocess.run(['tar', 'zxvf', 'nginx-$NGINX_VERSION.tar.gz'])
