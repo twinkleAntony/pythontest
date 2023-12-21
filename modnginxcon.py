@@ -41,7 +41,7 @@ def compile_modsecurity_nginx_connector():
             print(f"URL Error: {e.reason}")
         except Exception as e:
             print(f"Error: {e}")
-        subprocess.run(['sudo','wget', nginx_url])
+
 
         subprocess.run(['tar', 'zxvf', 'nginx-$NGINX_VERSION.tar.gz'])
         os.chdir('nginx-$NGINX_VERSION;')
