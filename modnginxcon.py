@@ -1,7 +1,6 @@
 import os
 import subprocess
 import tarfile
-import urllib.request
 
 
 def compile_modsecurity_nginx_connector():
@@ -32,16 +31,7 @@ def compile_modsecurity_nginx_connector():
 
         # Download NGINX source code
         nginx_url = "http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz"
-        try:
-            with urllib.request.urlopen(nginx_url) as response, open(f"nginx-{NGINX_VERSION}.tar.gz", "wb") as outfile:outfile.write(response.read())
-            print(f"Downloaded: nginx-{NGINX_VERSION}.tar.gz")
-        except urllib.error.HTTPError as e:
-            print(f"HTTP Error {e.code}: {e.reason}")
-        except urllib.error.URLError as e:
-            print(f"URL Error: {e.reason}")
-        except Exception as e:
-            print(f"Error: {e}")
-
+        subprocess.run(['sudo','wget', nginx_url])
 
         subprocess.run(['tar', 'zxvf', 'nginx-$NGINX_VERSION.tar.gz'])
         os.chdir('nginx-$NGINX_VERSION;')
