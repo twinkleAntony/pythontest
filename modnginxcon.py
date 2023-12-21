@@ -23,6 +23,7 @@ def compile_modsecurity_nginx_connector():
 
 
     try:
+        print('hi')
         NGINX_VERSION = subprocess.check_output(['`nginx -v 2>&1', '|', ' awk {print $3}', '|', 'cut -d"/"', '-f', '2'])
         print("NGINX Version:", NGINX_VERSION)
 
