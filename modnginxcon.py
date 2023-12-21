@@ -31,7 +31,7 @@ def compile_modsecurity_nginx_connector():
 
         # Download NGINX source code
         nginx_url = "http://nginx.org/download/nginx-{NGINX_VERSION}.tar.gz"
-        subprocess.run(['wget', nginx_url])
+        subprocess.run(['sudo','wget', nginx_url])
 
         subprocess.run(['tar', 'zxvf', 'nginx-$NGINX_VERSION.tar.gz'])
         os.chdir('nginx-$NGINX_VERSION;')
