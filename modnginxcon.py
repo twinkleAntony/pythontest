@@ -3,26 +3,26 @@ import subprocess
 
 
 def compile_modsecurity_nginx_connector():
+    # Change the current working directory
+    os.chdir(r"/usr/local/src/")
+    # Verify that the program's working directory indeed changed
+    print(f"The working directory is now '{os.getcwd()}'.")
+    # Clone ModSecurity module
+    clone_directory = "/usr/local/src//ModSecurity-nginx"
 
-    try:
+    # Check if the directory already exists
+    if os.path.exists(clone_directory):
+        print("ModSecurity-nginx repository is already cloned.")
 
-        # Change the current working directory
-        os.chdir(r"/usr/local/src/")
-
-        # Verify that the program's working directory indeed changed
-        print(f"The working directory is now '{os.getcwd()}'.")
-        # Clone ModSecurity module
-        clone_directory = "/usr/local/src//ModSecurity-nginx"
-
-        # Check if the directory already exists
-        if os.path.exists(clone_directory):
-            print("ModSecurity-nginx repository is already cloned.")
-        else:
+    else:
             # Clone ModSecurity module
             subprocess.run(
                 ["sudo", "git", "clone", "--depth", "1", "https://github.com/SpiderLabs/ModSecurity-nginx.git",
                  clone_directory])
             print("ModSecurity-nginx repository cloned successfully.")
+
+
+    try:
         NGINX_VERSION = subprocess.check_output(['`nginx -v 2>&1', '|', ' awk {print $3}', '|', 'cut -d"/"', '-f', '2'])
         print("NGINX Version:", NGINX_VERSION)
 
@@ -40,10 +40,7 @@ def compile_modsecurity_nginx_connector():
         subprocess.run(["mkdir", "-p", "/etc/nginx/modules/"])
         print("Directory '/etc/nginx/modules/' created successfully.")
         subprocess.run(['cp', 'objs/ngx_http_modsecurity_module.so', '/etc/nginx/modules'])
-
         print("ModSecurity connector for NGINX compiled and installed successfully.")
-
-
     except Exception as e:
      print("Error during compilation: {e}")
 
