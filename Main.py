@@ -129,7 +129,7 @@ def add_load_module_directive():
     except Exception as e:
         print(f"Error: {e}")
 
-import subprocess
+
 
 def download_and_setup_modsecurity_config():
     try:
@@ -146,7 +146,7 @@ def download_and_setup_modsecurity_config():
         subprocess.run(["mv", f"{modsec_config_dir}/modsecurity.conf-recommended", f"{modsec_config_dir}/modsecurity.conf"], check=True)
 
         # Download unicode mapping file
-        subprocess.run(["cd", tmp_dir], check=True)
+        os.chdir(r"/tmp")
         subprocess.run(["wget", "-c", unicode_mapping_url], check=True)
         subprocess.run(["cp", "-v", f"{tmp_dir}/unicode.mapping", f"{modsec_config_dir}/"], check=True)
 
@@ -155,13 +155,6 @@ def download_and_setup_modsecurity_config():
         print(f"Error: {e}")
     except Exception as e:
         print(f"Error: {e}")
-
-
-
-
-
-
-
 def main():
     while True:
         print("\nModSecurity Installation Menu:")
