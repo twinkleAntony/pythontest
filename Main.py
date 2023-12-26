@@ -1,6 +1,7 @@
 import os
 import subprocess
 import urllib.request
+import re
 
 
 def install_required_packages():
@@ -168,6 +169,41 @@ def change_sec_rule_engine():
     except Exception as e:
         print(f"Error: {e}")
 
+def configure_nginx_with_modsecurity():
+    nginx_config_path = "/etc/nginx/sites-enabled/default"
+    modsec_rules_file = "/etc/nginx/modsec/main.conf"
+    try:
+        with open(nginx_config_path, 'r') as file:
+            nginx_config_content = file.read()
+
+        # Specify the content to add
+        new_content = f'''
+            modsecurity on;
+            modsecurity_rules_file {modsec_rules_file};
+
+            location / {{
+                proxy_pass http://10.0.0.3/dvwa;
+                # Additional proxy settings if needed
+            }}
+        '''
+
+        # Find the first occurrence of '}' after 'server {' and add the new content before it
+        updated_config = re.sub(r'server {([^}]*})', fr'server {{{new_content}\1', nginx_config_content, flags=re.DOTALL)
+
+        with open(nginx_config_path, 'w') as file:
+            file.write(updated_config)
+
+        print("ModSecurity directives and proxy_pass added to the NGINX configuration file.")
+    except FileNotFoundError:
+        print(f"Error: {nginx_config_path} not found.")
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+
+
+
+
 
 
 def main():
@@ -186,6 +222,7 @@ def main():
             add_load_module_directive()
             download_and_setup_modsecurity_config()
             change_sec_rule_engine()
+            configure_nginx_with_modsecurity()
 
         elif choice == '2':
             print('hi')
