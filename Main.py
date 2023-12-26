@@ -200,8 +200,31 @@ def configure_nginx_with_modsecurity():
         print(f"Error: {e}")
 
 
+def edit_main_conf():
+    main_conf_path = "/etc/nginx/modsec/main.conf"
 
-import subprocess
+    try:
+        with open(main_conf_path, 'a') as file:
+            # Add or modify the content
+            file.write('\n')
+            file.write('Include "/etc/nginx/modsec/modsecurity.conf"\n')
+            file.write('\n# OWASP CRS setup\n')
+            file.write('Include /etc/nginx/modsec/owasp-modsecurity-crs/crs-setup.conf\n')
+            file.write('Include /etc/nginx/modsec/owasp-modsecurity-crs/plugins/*-config.conf\n')
+            file.write('Include /etc/nginx/modsec/owasp-modsecurity-crs/plugins/*-before.conf\n')
+            file.write('Include /etc/nginx/modsec/owasp-modsecurity-crs/rules/*.conf\n')
+            file.write('Include /etc/nginx/modsec/owasp-modsecurity-crs/plugins/*-after.conf\n')
+
+        print("Modifications added to main.conf successfully.")
+    except FileNotFoundError:
+        print(f"Error: {main_conf_path} not found.")
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+
+
+
 
 def setup_owasp_crs():
     try:
@@ -245,6 +268,7 @@ def main():
             download_and_setup_modsecurity_config()
             change_sec_rule_engine()
             configure_nginx_with_modsecurity()
+            edit_main_conf()
             setup_owasp_crs()
 
         elif choice == '2':
