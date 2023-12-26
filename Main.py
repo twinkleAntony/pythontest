@@ -28,11 +28,12 @@ def install_modsecurity_nginx():
     try:
         subprocess.run(['sudo', 'apt', 'update'])
         # Install required packages for Nginx1
+        subprocess.run(['noninteractive', 'apt-get' ,'-y','install', 'nginx-light'])
 
-        subprocess.run(['sudo', 'apt', 'install', 'nginx'])
         print("Nginx with ModSecurity installed successfully.")
         # Install molecularity
         subprocess.run(['sudo', 'apt', 'install', 'libmodsecurity3'])
+        subprocess.run(['sudo', 'apt', 'install', 'libmodsecurity-dev'])
 
         print("libmodsecurity installed successfully.")
 
@@ -88,7 +89,7 @@ def compile_modsecurity_nginx_connector():
             # Compile the dynamic module
 
         print(f"The working directory is now '{os.getcwd()}'.")
-        configure_command = "./configure --add-dynamic-module=../ModSecurity-nginx --with-cc-opt='-g -O2 -ffile-prefix-map=/build/nginx-d8gVax/nginx-1.18.0=. -flto=auto -ffat-lto-objects -flto=auto -ffat-lto-objects -fstack-protector-strong -Wformat -Werror=format-security -fPIC -Wdate-time -D_FORTIFY_SOURCE=2' --with-ld-opt='-Wl,-Bsymbolic-functions -flto=auto -ffat-lto-objects -flto=auto -Wl,-z,relro -Wl,-z,now -fPIC' --prefix=/usr/share/nginx --conf-path=/etc/nginx/nginx.conf --http-log-path=/var/log/nginx/access.log --error-log-path=/var/log/nginx/error.log --lock-path=/var/lock/nginx.lock --pid-path=/run/nginx.pid --modules-path=/usr/lib/nginx/modules --http-client-body-temp-path=/var/lib/nginx/body --http-fastcgi-temp-path=/var/lib/nginx/fastcgi --http-proxy-temp-path=/var/lib/nginx/proxy --http-scgi-temp-path=/var/lib/nginx/scgi --http-uwsgi-temp-path=/var/lib/nginx/uwsgi --with-compat --with-debug --with-pcre-jit --with-http_ssl_module --with-http_stub_status_module --with-http_realip_module --with-http_auth_request_module --with-http_v2_module --with-http_dav_module --with-http_slice_module --with-threads --add-dynamic-module=/path/http-geoip2 --with-http_addition_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_sub_module"
+        configure_command = "./configure --with-compat --add-dynamic-module=../ModSecurity-nginx"
         subprocess.run(configure_command, shell=True, check=True)
 
         # Run the 'make modules' command
