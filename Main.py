@@ -88,8 +88,13 @@ def compile_modsecurity_nginx_connector():
             # Compile the dynamic module
 
         print(f"The working directory is now '{os.getcwd()}'.")
-        subprocess.run(['./configure', '--with-compat', '--add-dynamic-module=../usr/local/src/ModSecurity-nginx'])
-        subprocess.run(['make', 'modules'])
+        configure_command = "./configure --with-compat --add-dynamic-module=../ModSecurity-nginx"
+        subprocess.run(configure_command, shell=True, check=True)
+
+        # Run the 'make modules' command
+        make_modules_command = "make modules"
+        subprocess.run(make_modules_command, shell=True, check=True)
+
         subprocess.run(["mkdir", "-p", "/etc/nginx/modules/"])
 
         print(f"The working directory is now '{os.getcwd()}'.")
