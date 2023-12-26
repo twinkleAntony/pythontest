@@ -106,10 +106,11 @@ def compile_modsecurity_nginx_connector():
         print("Error during compilation: {e}")
 #Python script to add load_module directive to NGINX configuration
 
-config_path = "/etc/nginx/nginx.conf"
-directive_to_add = 'load_module /etc/nginx/modules/ngx_http_modsecurity_module.so;'
 
-def add_directive_to_config(config_path, directive):
+
+def add_directive_to_config() :
+    config_path = "/etc/nginx/nginx.conf"
+    directive = 'load_module /etc/nginx/modules/ngx_http_modsecurity_module.so;'
     try:
         with open(config_path, 'r') as file:
             config_lines = file.readlines()
@@ -146,7 +147,7 @@ def main():
             install_required_packages()
             install_modsecurity_nginx()
             compile_modsecurity_nginx_connector()
-            add_directive_to_config(config_path, directive_to_add)
+            add_directive_to_config()
         elif choice == '2':
             print('hi')
 
