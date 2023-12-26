@@ -168,6 +168,8 @@ def change_sec_rule_engine():
         print(f"Error: {e}")
     except Exception as e:
         print(f"Error: {e}")
+def is_content_present(config_content, content_to_check):
+    return re.search(re.escape(content_to_check), config_content, flags=re.DOTALL) is not None
 
 def configure_nginx_with_modsecurity():
     nginx_config_path = "/etc/nginx/sites-enabled/default"
@@ -180,18 +182,22 @@ def configure_nginx_with_modsecurity():
         new_content = f'''
             modsecurity on;
             modsecurity_rules_file {modsec_rules_file};
-
-            location / {{
-                proxy_pass http://10.0.0.3/dvwa;
-                # Additional proxy settings if needed
-            }}
+         
         '''
+        # Check if the content is already present inside the server block
+        if not is_content_present(nginx_config_content, new_content):
+            # Find the first occurrence of '}' after 'server {' and add the new content before it
+            updated_config = re.sub(r'server {([^}]*})', fr'server {{{new_content}\1', nginx_config_content,
+                                    flags=re.DOTALL)
 
+            with open(nginx_config_path, 'w') as file:
+                file.write(updated_config)
+
+            print("ModSecurity directives added to the NGINX configuration file.")
+        else:
+            print("Content is already present. No modification needed.")
         # Find the first occurrence of '}' after 'server {' and add the new content before it
-        updated_config = re.sub(r'server {([^}]*})', fr'server {{{new_content}\1', nginx_config_content, flags=re.DOTALL)
 
-        with open(nginx_config_path, 'w') as file:
-            file.write(updated_config)
 
         print("ModSecurity directives and proxy_pass added to the NGINX configuration file.")
     except FileNotFoundError:
@@ -221,8 +227,6 @@ def edit_main_conf():
     except Exception as e:
         print(f"Error: {e}")
 
-import subprocess
-import os
 
 def check_if_owasp_crs_exists():
     owasp_crs_dir = "/etc/nginx/modsec/owasp-modsecurity-crs"
