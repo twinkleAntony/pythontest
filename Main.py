@@ -201,10 +201,32 @@ def configure_nginx_with_modsecurity():
 
 
 
+import subprocess
 
+def setup_owasp_crs():
+    try:
+        modsec_dir = "/etc/nginx/modsec"
+        owasp_crs_repo = "https://github.com/coreruleset/coreruleset"
+        owasp_crs_dir = "owasp-modsecurity-crs"
 
+        # Clone OWASP CRS repository
+        subprocess.run(["git", "clone", owasp_crs_repo], cwd=modsec_dir, check=True)
 
+        # Create a symbolic link to the cloned repository
+        subprocess.run(["ln", "-svf", "coreruleset", owasp_crs_dir], cwd=modsec_dir, check=True)
 
+        # Rename crs-setup.conf.example to crs-setup.conf
+        subprocess.run(["mv", "-v", "owasp-modsecurity-crs/crs-setup.conf.example", "owasp-modsecurity-crs/crs-setup.conf"], cwd=modsec_dir, check=True)
+
+        # Move and rename exclusion rule files
+        subprocess.run(["mv", "-v", "owasp-modsecurity-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example", "owasp-modsecurity-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf"], cwd=modsec_dir, check=True)
+        subprocess.run(["mv", "-v", "owasp-modsecurity-crs/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf.example", "owasp-modsecurity-crs/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf"], cwd=modsec_dir, check=True)
+
+        print("OWASP CRS setup completed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}")
+    except Exception as e:
+        print(f"Error: {e}")
 
 def main():
     while True:
@@ -223,6 +245,7 @@ def main():
             download_and_setup_modsecurity_config()
             change_sec_rule_engine()
             configure_nginx_with_modsecurity()
+            setup_owasp_crs()
 
         elif choice == '2':
             print('hi')
