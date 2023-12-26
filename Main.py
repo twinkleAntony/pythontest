@@ -107,33 +107,41 @@ def compile_modsecurity_nginx_connector():
 #Python script to add load_module directive to NGINX configuration
 
 
-
-def add_directive_to_config() :
-    config_path = "/etc/nginx/nginx.conf"
-    directive = 'load_module /etc/nginx/modules/ngx_http_modsecurity_module.so;'
+def add_load_module_directive(config_path, directive):
     try:
+        # Read the existing content of the file
         with open(config_path, 'r') as file:
-            config_lines = file.readlines()
+            file_content = file.read()
 
-        # Check if the directive is already present
-        if directive not in config_lines:
-            # Add the directive to the end of the file
-            config_lines.append(f"{directive}\n")
+        # Add the load_module directive to the beginning of the file
+        new_content = f"{directive}\n{file_content}"
 
-            # Write the modified content back to the file
-            with open(config_path, 'w') as file:
-                file.writelines(config_lines)
+        # Write the modified content back to the file
+        with open(config_path, 'w') as file:
+            file.write(new_content)
 
-            print(f"Directive added to {config_path}")
-        else:
-            print(f"Directive already present in {config_path}")
-
+        print(f"Load module directive added to the beginning of {config_path}")
     except FileNotFoundError:
         print(f"Error: {config_path} not found.")
+    except Exception as e:
+        print(f"Error: {e}")
 
+if __name__ == "__main__":
+    # Load module directive to be added
+    load_module_directive = '# Instructs NGINX to load the ModSecurity dynamic module when it processes the configuration:\nload_module /etc/nginx/modules/ngx_http_modsecurity_module.so;'
 
+    # File path to which the load module directive will be added
+    nginx_config_path = "/etc/nginx/nginx.conf"  # Update this with the correct path
 
+    try:
+        # Add the load_module directive to the NGINX configuration file
+        add_load_module_directive(nginx_config_path, load_module_directive)
 
+        print(f"Load module directive added to {nginx_config_path}")
+    except FileNotFoundError:
+        print(f"Error: {nginx_config_path} not found.")
+    except Exception as e:
+        print(f"Error: {e}")
 def main():
     while True:
         print("\nModSecurity Installation Menu:")
@@ -147,7 +155,8 @@ def main():
             install_required_packages()
             install_modsecurity_nginx()
             compile_modsecurity_nginx_connector()
-            add_directive_to_config()
+            add_load_module_directive()
+
         elif choice == '2':
             print('hi')
 
