@@ -129,6 +129,35 @@ def add_load_module_directive():
     except Exception as e:
         print(f"Error: {e}")
 
+import subprocess
+
+def download_and_setup_modsecurity_config():
+    try:
+        modsec_config_dir = "/etc/nginx/modsec"
+        modsec_config_url = "https://raw.githubusercontent.com/SpiderLabs/ModSecurity/v3/master/modsecurity.conf-recommended"
+        unicode_mapping_url = "https://raw.githubusercontent.com/SpiderLabs/ModSecurity/master/unicode.mapping"
+        tmp_dir = "/tmp"
+
+        # Create modsec directory
+        subprocess.run(["mkdir", "-p", modsec_config_dir], check=True)
+
+        # Download and move modsecurity.conf file
+        subprocess.run(["wget", "-P", modsec_config_dir, modsec_config_url], check=True)
+        subprocess.run(["mv", f"{modsec_config_dir}/modsecurity.conf-recommended", f"{modsec_config_dir}/modsecurity.conf"], check=True)
+
+        # Download unicode mapping file
+        subprocess.run(["cd", tmp_dir], check=True)
+        subprocess.run(["wget", "-c", unicode_mapping_url], check=True)
+        subprocess.run(["cp", "-v", f"{tmp_dir}/unicode.mapping", f"{modsec_config_dir}/"], check=True)
+
+        print("ModSecurity configuration files downloaded and set up successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}")
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+
 
 
 
@@ -147,6 +176,7 @@ def main():
             install_modsecurity_nginx()
             compile_modsecurity_nginx_connector()
             add_load_module_directive()
+            download_and_setup_modsecurity_config()
 
         elif choice == '2':
             print('hi')
