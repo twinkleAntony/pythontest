@@ -155,6 +155,21 @@ def download_and_setup_modsecurity_config():
         print(f"Error: {e}")
     except Exception as e:
         print(f"Error: {e}")
+def change_sec_rule_engine():
+    try:
+        modsec_config_file = "/etc/nginx/modsec/modsecurity.conf"
+
+        # Use sed to replace SecRuleEngine directive in the ModSecurity configuration file
+        subprocess.run(["sed", "-i", 's/SecRuleEngine DetectionOnly/SecRuleEngine On/', modsec_config_file], check=True)
+
+        print("SecRuleEngine directive changed to 'On' in the ModSecurity configuration file.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}")
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+
 def main():
     while True:
         print("\nModSecurity Installation Menu:")
@@ -170,6 +185,7 @@ def main():
             compile_modsecurity_nginx_connector()
             add_load_module_directive()
             download_and_setup_modsecurity_config()
+            change_sec_rule_engine()
 
         elif choice == '2':
             print('hi')
