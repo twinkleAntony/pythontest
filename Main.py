@@ -47,8 +47,8 @@ def compile_modsecurity_nginx_connector():
     os.chdir(r"/usr/local/src")
     # Verify that the program's working directory indeed changed
     print(f"The working directory is now '{os.getcwd()}'.")
-    # Clone ModSecurity module
-    clone_directory = "/usr/local/src//ModSecurity-nginx"
+    # Clone ModSecurity modulecd
+    clone_directory = "/usr/local/src/ModSecurity-nginx"
 
     # Check if the directory already exists
     if os.path.exists(clone_directory):
@@ -88,7 +88,7 @@ def compile_modsecurity_nginx_connector():
             # Compile the dynamic module
 
         print(f"The working directory is now '{os.getcwd()}'.")
-        subprocess.run(['./configure', '--with-compat', '--add-dynamic-module=../ModSecurity-nginx'])
+        subprocess.run(['./configure', '--with-compat', '--add-dynamic-module=../usr/local/src/ModSecurity-nginx'])
         subprocess.run(['make', 'modules'])
         subprocess.run(["mkdir", "-p", "/etc/nginx/modules/"])
 
