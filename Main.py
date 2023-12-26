@@ -221,47 +221,41 @@ def edit_main_conf():
     except Exception as e:
         print(f"Error: {e}")
 
+
+
 def setup_owasp_crs():
-    def check_if_owasp_crs_exists():
-        owasp_crs_dir = "/etc/nginx/modsec/owasp-modsecurity-crs"
+    clone_direct = "/etc/nginx/modsec/owasp-modsecurity-crs"
 
-        return os.path.exists(owasp_crs_dir) and os.listdir(owasp_crs_dir)
+    # Check if the directory already exists
+    if os.path.exists(clone_direct):
+        print("ModSecurity-nginx repository is already cloned.")
 
-    def setup_owasp_crs():
-        try:
-            modsec_dir = "/etc/nginx/modsec"
-            owasp_crs_repo = "https://github.com/coreruleset/coreruleset"
-            owasp_crs_dir = "owasp-modsecurity-crs"
+    else:
+           modsec_dir = "/etc/nginx/modsec"
+           owasp_crs_repo = "https://github.com/coreruleset/coreruleset"
+           subprocess.run(["git", "clone", owasp_crs_repo], cwd=modsec_dir, check=True)
 
-            # Check if OWASP CRS already exists and is not empty
-            if check_if_owasp_crs_exists():
-                print("Error: OWASP CRS directory already exists and is not empty.")
-                return
-            else:
-
-            #  Clone OWASP CRS repository
-              subprocess.run(["git", "clone", owasp_crs_repo], cwd=modsec_dir, check=True)
-
-            # Create a symbolic link to the cloned repository
-              subprocess.run(["ln", "-svf", "coreruleset", owasp_crs_dir], cwd=modsec_dir, check=True)
+    try:
+        # Create a symbolic link to the cloned repository
+        owasp_crs_dir = "owasp-modsecurity-crs"
+        subprocess.run(["ln", "-svf", "coreruleset", owasp_crs_dir], cwd=modsec_dir, check=True)
 
             # Rename crs-setup.conf.example to crs-setup.conf
-              subprocess.run(["mv", "-v", f"{owasp_crs_dir}/crs-setup.conf.example", f"{owasp_crs_dir}/crs-setup.conf"],
+        subprocess.run(["mv", "-v", f"{owasp_crs_dir}/crs-setup.conf.example", f"{owasp_crs_dir}/crs-setup.conf"],
                            cwd=modsec_dir, check=True)
 
             # Move and rename exclusion rule files
-              subprocess.run(["mv", "-v", f"{owasp_crs_dir}/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example",
+        subprocess.run(["mv", "-v", f"{owasp_crs_dir}/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example",
                             f"{owasp_crs_dir}/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf"], cwd=modsec_dir,
                            check=True)
-              subprocess.run(["mv", "-v", f"{owasp_crs_dir}/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf.example",
+        subprocess.run(["mv", "-v", f"{owasp_crs_dir}/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf.example",
                             f"{owasp_crs_dir}/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf"], cwd=modsec_dir,
                            check=True)
 
-            print("OWASP CRS setup completed successfully.")
-        except subprocess.CalledProcessError as e:
-            print(f"Error: {e}")
-        except Exception as e:
-            print(f"Error: {e}")
+        print("OWASP CRS setup completed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}")
+
 def main():
     while True:
         print("\nModSecurity Installation Menu:")
