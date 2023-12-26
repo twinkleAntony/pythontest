@@ -41,8 +41,8 @@ def install_modsecurity_nginx():
 
 
 def compile_modsecurity_nginx_connector():
-    subprocess.run(['apt', 'get', 'update'])
-    subprocess.run(['apt''install', 'build-essential'])
+
+    subprocess.run(['apt','install', 'build-essential'])
     # Change the current working directory
     os.chdir(r"/usr/local/src")
     # Verify that the program's working directory indeed changed
