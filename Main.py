@@ -31,7 +31,7 @@ def install_modsecurity_nginx():
         # Install required packages for Nginx1
         subprocess.run(['sudo','apt','install', 'nginx'])
 
-        print("Nginx with ModSecurity installed successfully.")
+        print("Nginx  installed successfully.")
         # Install molecularity
         subprocess.run(['sudo', 'apt', 'install', 'libmodsecurity3'])
         subprocess.run(['sudo', 'apt', 'install', 'libmodsecurity-dev'])
@@ -262,7 +262,17 @@ def setup_owasp_crs():
     except Exception as e:
         print(f"Error: {e}")
 
-
+def remove_rules_file():
+    rules_file_path = "/etc/nginx/modsec/owasp-modsecurity-crs/rules/REQUEST-922-MULTIPART-ATTACK.conf"
+    try:
+        # Check if the file exists before attempting to remove it
+        if os.path.exists(rules_file_path):
+            os.remove(rules_file_path)
+            print(f"{rules_file_path} removed successfully.")
+        else:
+            print(f"Error: {rules_file_path} not found.")
+    except Exception as e:
+        print(f"Error: {e}")
 
 
 def main():
@@ -284,6 +294,8 @@ def main():
             configure_nginx_with_modsecurity()
             edit_main_conf()
             setup_owasp_crs()
+            remove_rules_file()
+
 
         elif choice == '2':
             print('hi')
