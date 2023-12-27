@@ -29,7 +29,7 @@ def install_modsecurity_nginx():
     try:
         subprocess.run(['sudo', 'apt', 'update'])
         # Install required packages for Nginx1
-        subprocess.run(['sudo', 'get' ,'install', 'nginx'])
+        subprocess.run(['sudo','apt','install', 'nginx'])
 
         print("Nginx with ModSecurity installed successfully.")
         # Install molecularity
